@@ -57,12 +57,22 @@ int main(int argc, char **argv)
     fb.setLowLight(true);
 
     QPainter p(fb.paintDevice());
-    p.fillRect(QRect(QPoint(), fb.size()), Qt::black);
-    for (int i = Qt::white; i < Qt::darkYellow; ++i) {
-        p.setPen(Qt::GlobalColor(i));
-        p.drawEllipse(QPoint(4, 4), 3, 3);
-        p.drawLine(QPoint(4, 4), QPoint(7, 7));
-        sleep(1);
+    int x = 7, dx = -1;
+    Qt::GlobalColor col = Qt::white;
+    for (int i = 0; i < 200; ++i) {
+        p.fillRect(QRect(QPoint(), fb.size()), Qt::black);
+        p.setPen(col);
+        p.drawEllipse(QPoint(x, 4), 3, 3);
+        p.drawLine(QPoint(x, 4), QPoint(x + 3, 7));
+        x += dx;
+        if (x < -4 || x > 10)
+            dx *= -1;
+        usleep(1000 * 100);
+        if (!(i % 8)) {
+            col = Qt::GlobalColor(col + 1);
+            if (col == Qt::transparent)
+                col = Qt::white;
+        }
     }
 
     p.fillRect(QRect(QPoint(), fb.size()), Qt::black);
