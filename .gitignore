@@ -16,7 +16,6 @@ lib/
 include/
 bin/
 /plugins/
-rtimulib
 .pch/
 QtSenseHat.version
 QtSenseHat.version.*
