@@ -55,6 +55,7 @@ class QSENSEHAT_EXPORT QSenseHatSensors : public QObject
     Q_PROPERTY(QVector3D gyro READ gyro NOTIFY gyroChanged)
     Q_PROPERTY(QVector3D acceleration READ acceleration NOTIFY accelerationChanged)
     Q_PROPERTY(QVector3D compass READ compass NOTIFY compassChanged)
+    Q_PROPERTY(QVector3D orientation READ orientation NOTIFY orientationChanged)
 
 public:
     enum InitFlag {
@@ -69,6 +70,7 @@ public:
         UpdateGyro = 0x08,
         UpdateAcceleration = 0x10,
         UpdateCompass = 0x20,
+        UpdateOrientation = 0x40,
         UpdateAll = 0xFF
     };
     Q_DECLARE_FLAGS(UpdateFlags, UpdateFlag)
@@ -85,6 +87,7 @@ public:
     QVector3D gyro() const;
     QVector3D acceleration() const;
     QVector3D compass() const;
+    QVector3D orientation() const;
 
 signals:
     void humidityChanged(qreal value);
@@ -93,6 +96,7 @@ signals:
     void gyroChanged(const QVector3D &value);
     void accelerationChanged(const QVector3D &value);
     void compassChanged(const QVector3D &value);
+    void orientationChanged(const QVector3D &value);
 
 private:
     Q_DISABLE_COPY(QSenseHatSensors)

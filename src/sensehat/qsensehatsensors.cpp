@@ -77,6 +77,7 @@ public:
     QVector3D gyro;
     QVector3D acceleration;
     QVector3D compass;
+    QVector3D orientation;
 };
 
 QSenseHatSensorsPrivate::~QSenseHatSensorsPrivate()
@@ -150,7 +151,8 @@ void QSenseHatSensorsPrivate::update(QSenseHatSensors::UpdateFlags what)
             qWarning("Failed to read pressure data");
     }
 
-    const int imuFlags = QSenseHatSensors::UpdateGyro | QSenseHatSensors::UpdateAcceleration | QSenseHatSensors::UpdateCompass;
+    const int imuFlags = QSenseHatSensors::UpdateGyro | QSenseHatSensors::UpdateAcceleration
+            | QSenseHatSensors::UpdateCompass | QSenseHatSensors::UpdateOrientation;
     if (what & imuFlags) {
         if (!imuInited) {
             imuInited = true;
@@ -211,6 +213,13 @@ void QSenseHatSensorsPrivate::report(const RTIMU_DATA &data, QSenseHatSensors::U
         if (data.compassValid) {
             compass = QVector3D(data.compass.x(), data.compass.y(), data.compass.z());
             emit q->compassChanged(compass);
+        }
+    }
+
+    if (what.testFlag(QSenseHatSensors::UpdateOrientation)) {
+        if (data.fusionPoseValid) {
+            orientation = QVector3D(data.fusionPose.x(), data.fusionPose.y(), data.fusionPose.z());
+            emit q->orientationChanged(orientation);
         }
     }
 }
@@ -279,6 +288,12 @@ QVector3D QSenseHatSensors::compass() const
 {
     Q_D(const QSenseHatSensors);
     return d->compass;
+}
+
+QVector3D QSenseHatSensors::orientation() const
+{
+    Q_D(const QSenseHatSensors);
+    return d->orientation;
 }
 
 QT_END_NAMESPACE
