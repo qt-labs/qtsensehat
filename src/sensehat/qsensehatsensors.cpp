@@ -35,6 +35,7 @@
 ****************************************************************************/
 
 #include "qsensehatsensors.h"
+#include <QStandardPaths>
 #include <QFile>
 #include <QTimer>
 #include <RTIMULib.h>
@@ -90,8 +91,10 @@ QSenseHatSensorsPrivate::~QSenseHatSensorsPrivate()
 
 void QSenseHatSensorsPrivate::open()
 {
-    const QString defaultConfig = QStringLiteral("/etc/RTIMULib.ini");
-    const QString writableConfig = QStringLiteral("RTIMULib.ini");
+    const QString configFileName = QStringLiteral("RTIMULib.ini");
+    const QString defaultConfig = QStringLiteral("/etc/") + configFileName;
+    const QString writableConfigDir = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation) + QStringLiteral("/sense_hat");
+    const QString writableConfig = writableConfigDir + QStringLiteral("/") + configFileName;
 
     if (!flags.testFlag(QSenseHatSensors::DontCopyIniFile)) {
         if (!QFile::exists(writableConfig)) {
@@ -101,7 +104,8 @@ void QSenseHatSensorsPrivate::open()
             else
                 qWarning("/etc/RTIMULib.ini not found, sensors may not be functional");
         }
-        settings = new RTIMUSettings;
+        QByteArray dirName = writableConfigDir.toUtf8();
+        settings = new RTIMUSettings(dirName.constData(), "RTIMULib");
     } else {
         settings = new RTIMUSettings("/etc", "RTIMULib");
     }
