@@ -62,3 +62,8 @@ Sensors example:
         QTimer::singleShot(10000, &app, &QCoreApplication::quit);
         return app.exec();
     }
+
+Raspbian's default calibration from /etc is picked up automatically, similarly to the
+Python lib. Note however that this is a text file and numbers may not be parsable with
+locale settings that use a decimal separator other than the dot. If the orientation is
+reported as all-NaNs, check this first.
