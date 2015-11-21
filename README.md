@@ -56,6 +56,9 @@ Sensors example:
         QObject::connect(&sensors, &QSenseHatSensors::compassChanged, [](const QVector3D &v) {
             qDebug() << "Compass:" << v;
         });
+        QObject::connect(&sensors, &QSenseHatSensors::orientationChanged, [](const QVector3D &v) {
+            qDebug() << "Orientation:" << v;
+        });
         QTimer::singleShot(10000, &app, &QCoreApplication::quit);
         return app.exec();
     }
