@@ -178,6 +178,12 @@ void QSenseHatSensorsPrivate::update(QSenseHatSensors::UpdateFlags what)
     }
 }
 
+static inline qreal toDeg360(qreal rad)
+{
+    const qreal deg = qRadiansToDegrees(rad);
+    return deg < 0 ? deg + 360 : deg;
+}
+
 void QSenseHatSensorsPrivate::report(const RTIMU_DATA &data, QSenseHatSensors::UpdateFlags what)
 {
     if (what.testFlag(QSenseHatSensors::UpdateHumidity)) {
@@ -224,7 +230,11 @@ void QSenseHatSensorsPrivate::report(const RTIMU_DATA &data, QSenseHatSensors::U
 
     if (what.testFlag(QSenseHatSensors::UpdateOrientation)) {
         if (data.fusionPoseValid) {
-            orientation = QVector3D(data.fusionPose.x(), data.fusionPose.y(), data.fusionPose.z());
+            // To be compatible with the Python lib's get_orientation(), report
+            // degrees in range 0..360 and in the order pitch, roll, yaw.
+            orientation = QVector3D(toDeg360(data.fusionPose.y()),
+                                    toDeg360(data.fusionPose.x()),
+                                    toDeg360(data.fusionPose.z()));
             emit q->orientationChanged(orientation);
         }
     }
