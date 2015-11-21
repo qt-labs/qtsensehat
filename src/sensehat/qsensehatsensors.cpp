@@ -230,11 +230,9 @@ void QSenseHatSensorsPrivate::report(const RTIMU_DATA &data, QSenseHatSensors::U
 
     if (what.testFlag(QSenseHatSensors::UpdateOrientation)) {
         if (data.fusionPoseValid) {
-            // To be compatible with the Python lib's get_orientation(), report
-            // degrees in range 0..360 and in the order pitch, roll, yaw.
-            orientation = QVector3D(toDeg360(data.fusionPose.y()),
-                                    toDeg360(data.fusionPose.x()),
-                                    toDeg360(data.fusionPose.z()));
+            orientation = QVector3D(toDeg360(data.fusionPose.x()),  // roll
+                                    toDeg360(data.fusionPose.y()),  // pitch
+                                    toDeg360(data.fusionPose.z())); // yaw
             emit q->orientationChanged(orientation);
         }
     }

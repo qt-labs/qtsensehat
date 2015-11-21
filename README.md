@@ -65,8 +65,7 @@ Sensors example:
 
 Raspbian's default calibration from /etc is picked up automatically, similarly to the
 Python lib. Note however that this is a text file and numbers may not be parsable with
-locale settings that use a decimal separator other than the dot. If the orientation is
-reported as all-NaNs, check this first.
+locale settings that use a decimal separator other than the dot. If the orientation data
+is invalid, check this first.
 
-Orientation maintains compatibility with Python's get_orientation(): the QVector3D's x, y,
-z components correspond to pitch, roll, yaw in degrees in range 0..360.
+Orientation is converted to degrees in range 0..360. Other values are reported as-is.
