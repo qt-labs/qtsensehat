@@ -99,10 +99,12 @@ void QSenseHatSensorsPrivate::open()
     if (!flags.testFlag(QSenseHatSensors::DontCopyIniFile)) {
         if (!QFile::exists(writableConfig)) {
             qCDebug(qLcSH) << "Copying" << defaultConfig << "to" << writableConfig;
-            if (QFile::exists(defaultConfig))
+            if (QFile::exists(defaultConfig)) {
+                QDir(QStringLiteral("/")).mkpath(writableConfigDir);
                 QFile::copy(defaultConfig, writableConfig);
-            else
+            } else {
                 qWarning("/etc/RTIMULib.ini not found, sensors may not be functional");
+            }
         }
         QByteArray dirName = writableConfigDir.toUtf8();
         settings = new RTIMUSettings(dirName.constData(), "RTIMULib");
