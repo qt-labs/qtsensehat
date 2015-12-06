@@ -63,9 +63,5 @@ Sensors example:
         return app.exec();
     }
 
-Raspbian's default calibration from /etc is picked up automatically, similarly to the
-Python lib. Note however that this is a text file and numbers may not be parsable with
-locale settings that use a decimal separator other than the dot. If the orientation data
-is invalid, check this first.
-
-Orientation is converted to degrees in range 0..360. Other values are reported as-is.
+Raspbian's default calibration from /etc is picked up automatically, similarly to the Python
+lib. Orientation is converted to degrees in range 0..360. Other values are reported as-is.

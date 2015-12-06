@@ -81,6 +81,20 @@ public:
     QVector3D orientation;
 };
 
+class CLocale
+{
+public:
+    CLocale() {
+        oldLoc = QByteArray(setlocale(LC_ALL, 0));
+        setlocale(LC_ALL, "C");
+    }
+    ~CLocale() {
+        setlocale(LC_ALL, oldLoc.constData());
+    }
+private:
+    QByteArray oldLoc;
+};
+
 QSenseHatSensorsPrivate::~QSenseHatSensorsPrivate()
 {
     delete rtpressure;
@@ -91,6 +105,7 @@ QSenseHatSensorsPrivate::~QSenseHatSensorsPrivate()
 
 void QSenseHatSensorsPrivate::open()
 {
+    CLocale c; // to avoid decimal separator trouble in the ini file
     const QString configFileName = QStringLiteral("RTIMULib.ini");
     const QString defaultConfig = QStringLiteral("/etc/") + configFileName;
     const QString writableConfigDir = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation) + QStringLiteral("/sense_hat");
